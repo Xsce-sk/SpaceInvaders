@@ -27,5 +27,8 @@ public class PlayerBullet : MonoBehaviour
 
             //addPoints and stuff
         }
+
+        if (col.gameObject.name.Contains("Wall"))
+            Destroy(this.gameObject);
     }
 }

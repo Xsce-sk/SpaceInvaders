@@ -6,7 +6,7 @@ public class EnemyShootingManager : MonoBehaviour
 {
     public float waitTime = 1f;
     private float timeToShoot;
-    public float shootChance = 0.5f;
+    //public float shootChance = 0.5f;
     public List<GameObject> col0 = new List<GameObject>();
     public List<GameObject> col1 = new List<GameObject>();
     public List<GameObject> col2 = new List<GameObject>();
@@ -18,14 +18,15 @@ public class EnemyShootingManager : MonoBehaviour
     public List<GameObject> col8 = new List<GameObject>();
     public List<GameObject> col9 = new List<GameObject>();
     public List<GameObject> col10 = new List<GameObject>();
-    public int min = 0;
-    public int max = 11;
+    public float minTime = 0.5f;
+    public float maxTime = 2f;
     private List<List<GameObject>> columns = new List<List<GameObject>>();
 
     public GameObject enemyBullet;
     // Start is called before the first frame update
     void Awake()
     {
+        waitTime = Random.Range(minTime, maxTime);
         timeToShoot = Time.time + waitTime;
         columns.Add(col0);
         columns.Add(col1);
@@ -50,18 +51,16 @@ public class EnemyShootingManager : MonoBehaviour
     {
         if(Time.time >= timeToShoot && columns.Count > 0)
         {
+            waitTime = Random.Range(minTime, maxTime);
             timeToShoot = Time.time + waitTime;
 
             UpdateLists(columns);
 
-            if (Random.Range(0f, 1f) <= shootChance)
+            if (columns.Count > 0)
             {
-                if (columns.Count > 0)
-                {
-                    int index = Random.Range(0, columns.Count);
+                int index = Random.Range(0, columns.Count);
 
-                    Instantiate(enemyBullet, columns[index][0].transform.position, Quaternion.identity);
-                }
+                Instantiate(enemyBullet, columns[index][0].transform.position, Quaternion.identity);
             }
         }
     }

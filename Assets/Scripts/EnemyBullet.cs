@@ -17,4 +17,16 @@ public class EnemyBullet : MonoBehaviour
     {
         rb2d.velocity = new Vector2(0, -1) * speed;
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.name.Contains("Player") && !col.gameObject.name.Contains("Bullet"))
+        {
+            //decrease life
+            Destroy(this.gameObject);
+        }
+
+        if (col.gameObject.name.Contains("Wall"))
+            Destroy(this.gameObject);
+    }
 }
