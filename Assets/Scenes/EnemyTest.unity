@@ -142,7 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitTime: 1
-  shootChance: 0.8
   col0:
   - {fileID: 1239056406}
   - {fileID: 1710176326}
@@ -209,8 +208,8 @@ MonoBehaviour:
   - {fileID: 2110059890}
   - {fileID: 1436739283}
   - {fileID: 947512854}
-  min: 0
-  max: 11
+  minTime: 0.5
+  maxTime: 1
   enemyBullet: {fileID: 4524132425866578364, guid: 25c7b56ecf635f840acc612c60bf04b5,
     type: 3}
 --- !u!4 &44044458
