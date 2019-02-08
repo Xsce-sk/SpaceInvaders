@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6664822648605442622}
   - component: {fileID: 6664822648605442621}
   - component: {fileID: 5742317127888153272}
+  - component: {fileID: 7479418461403182711}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6664822648605442617}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -9.5, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -101,6 +102,20 @@ PolygonCollider2D:
       - {x: 1.4944191, y: -0.12637901}
       - {x: 1.3731012, y: 0.18353248}
       - {x: 1.1321173, y: 0.38018155}
+--- !u!114 &7479418461403182711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6664822648605442617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 500edaa8fb1fbc040a897c1beeac5dcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerBullet: {fileID: 2787201082364629014, guid: 7e701b20b47997f409a11057777c4ec7,
+    type: 3}
 --- !u!1 &6664822649777312349
 GameObject:
   m_ObjectHideFlags: 0

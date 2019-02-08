@@ -8,11 +8,12 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Transform trans;
     [SerializeField] private static float enemyMovementMod = 1f;
     public float speed = 10;
-    public float downTimer = 10;
+    public float downTimer = 0.5f;
     public Rigidbody2D rb2d;
     //private static bool moveDown = false;
     private static Vector2 hVelocity;
     private static Vector2 vVelocity;
+    private static bool canChangeDirection = true;
 
     void Awake()
     {
@@ -21,6 +22,7 @@ public class EnemyMovement : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         hVelocity = new Vector2(1, 0) * enemyMovementMod * speed;
         vVelocity = new Vector2(0, 0);
+        canChangeDirection = true;
     }
 
     void Start()
@@ -48,10 +50,8 @@ public class EnemyMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("A");
-        if (col.gameObject.name.Contains("Wall"))
+        if (col.gameObject.name.Contains("Wall") && canChangeDirection)
         {
-            Debug.Log("B");
             ChangeDirection();
             StartCoroutine("GoDown");
         }
@@ -59,11 +59,13 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator GoDown()
     {
+        canChangeDirection = false;
         vVelocity = new Vector2(0, -1) * speed;
-        Vector2 temp = hVelocity;
-        hVelocity = Vector2.zero;
-        yield return new WaitForSeconds(downTimer * Time.deltaTime);
-        hVelocity = temp;
+        //Vector2 temp = hVelocity;
+        //hVelocity = Vector2.zero;
+        yield return new WaitForSeconds(downTimer);
+        //hVelocity = temp;
         vVelocity = new Vector2(0, 0);
+        canChangeDirection = true;
     }
 }
