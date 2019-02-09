@@ -23,6 +23,7 @@ public class EnemyBullet : MonoBehaviour
         if (col.gameObject.name.Contains("Player") && !col.gameObject.name.Contains("Bullet"))
         {
             //decrease life
+            PlayerUtilities.life -= 1;
             Destroy(this.gameObject);
         }
 

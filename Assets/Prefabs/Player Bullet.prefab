@@ -131,3 +131,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2d: {fileID: 1213156618249198019}
   speed: 10
+  player: {fileID: 8620597081082560203, guid: e54133c813376c140834c4d571daebde, type: 3}
