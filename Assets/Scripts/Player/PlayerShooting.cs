@@ -1,11 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerShooting : MonoBehaviour
 {
+    [Serializable]
+    public class ShootEvent : UnityEvent<PlayerShooting>
+    { }
+
     public GameObject playerBullet;
     public GameObject playerFire;
+    public ShootEvent OnShoot;
 
     private GameObject m_PreviousBullet;
     private GameObject m_PlayerFire;
@@ -22,12 +29,11 @@ public class PlayerShooting : MonoBehaviour
     {
         if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Mouse0)) && m_PreviousBullet == null) 
         {
-            GetSpawnPosition();
-            m_PreviousBullet = Instantiate(playerBullet, m_SpawnPosition, Quaternion.identity) as GameObject;
-            m_PreviousBullet.transform.SetParent(m_Transform);
+            OnShoot.Invoke(this);
 
-            m_PlayerFire = Instantiate(playerFire, m_SpawnPosition, Quaternion.identity) as GameObject;
-            m_PlayerFire.transform.SetParent(m_Transform);
+            GetSpawnPosition();
+            SpawnBullet();
+            SpawnFire();
         }
     }
 
@@ -35,5 +41,17 @@ public class PlayerShooting : MonoBehaviour
     {
         Vector3 currentPosition = m_Transform.position;
         m_SpawnPosition = new Vector3(currentPosition.x, currentPosition.y + 1, currentPosition.z);
+    }
+
+    void SpawnBullet()
+    {
+        m_PreviousBullet = Instantiate(playerBullet, m_SpawnPosition, Quaternion.identity) as GameObject;
+        m_PreviousBullet.transform.SetParent(m_Transform);
+    }
+
+    void SpawnFire()
+    {
+        m_PlayerFire = Instantiate(playerFire, m_SpawnPosition, Quaternion.identity) as GameObject;
+        m_PlayerFire.transform.SetParent(m_Transform);
     }
 }
