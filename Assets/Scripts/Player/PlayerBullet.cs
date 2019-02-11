@@ -29,8 +29,10 @@ public class PlayerBullet : MonoBehaviour
             Destroy(col.gameObject);
             Destroy(this.gameObject);
         }
+    }
 
-        if (col.gameObject.name.Contains("Wall"))
-            Destroy(this.gameObject);
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }
