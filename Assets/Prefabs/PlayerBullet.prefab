@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1213156618249198019}
   - component: {fileID: 3720384088017161317}
   m_Layer: 0
-  m_Name: Player Bullet
+  m_Name: PlayerBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2787201082364629014}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -129,6 +129,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d453e2cbc507ec4da97da55d55c7621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb2d: {fileID: 1213156618249198019}
   speed: 10
-  player: {fileID: 8620597081082560203, guid: e54133c813376c140834c4d571daebde, type: 3}

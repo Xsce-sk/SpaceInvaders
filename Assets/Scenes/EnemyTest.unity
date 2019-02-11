@@ -223,11 +223,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 7, z: -0.07344968}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 74046649}
-  - {fileID: 425603009}
-  - {fileID: 1058351034}
-  - {fileID: 1750201851}
   - {fileID: 1334080485}
+  - {fileID: 1750201851}
+  - {fileID: 1058351034}
+  - {fileID: 425603009}
+  - {fileID: 74046649}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -415,7 +415,7 @@ Transform:
   - {fileID: 2063817241}
   - {fileID: 488262555}
   m_Father: {fileID: 44044458}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &85589599
 GameObject:
@@ -1676,7 +1676,7 @@ Transform:
   - {fileID: 1044880999}
   - {fileID: 450099285}
   m_Father: {fileID: 44044458}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &443144654
 GameObject:
@@ -2600,7 +2600,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 24
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -5204,7 +5204,7 @@ Transform:
   - {fileID: 1748244390}
   - {fileID: 947512859}
   m_Father: {fileID: 44044458}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1338489203
 GameObject:
@@ -7688,7 +7688,7 @@ Transform:
   - {fileID: 451190895}
   - {fileID: 1436739288}
   m_Father: {fileID: 44044458}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1839832503
 GameObject:
