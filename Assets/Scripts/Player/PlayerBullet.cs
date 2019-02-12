@@ -15,29 +15,27 @@ public class PlayerBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        string colliderName = collision.gameObject.name;
-
-        if (colliderName.Contains("Enemy") && !colliderName.Contains("Bullet"))
+        if (collision.CompareTag("TopEnemy"))
         {
-            float enemyPoints = 40;
-
-            if (colliderName.Contains("Bottom Enemy"))
-            {
-                enemyPoints = 10;
-            }
-            else if (colliderName.Contains("Middle Enemy"))
-            {
-                enemyPoints = 20;
-            }
-
-            PlayerUtilities.score += enemyPoints;
-
+            PlayerUtilities.score += 40;
             Destroy(collision.gameObject);
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
-        else if (colliderName.Contains("Bullet"))
+        else if (collision.CompareTag("MiddleEnemy"))
         {
+            PlayerUtilities.score += 20;
             Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("BottomEnemy"))
+        {
+            PlayerUtilities.score += 10;
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Shield"))
+        {
+            Destroy(gameObject);
         }
     }
 

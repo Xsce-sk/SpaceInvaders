@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
     public float moveSpeed = 3;
-    public float moveDownDuration = 2;
+    public float moveDownDuration = 1;
     public float defaultShootDelay = 3;
     public float delayShootRange = 1;
     public Vector2 startPosition = Vector2.zero;

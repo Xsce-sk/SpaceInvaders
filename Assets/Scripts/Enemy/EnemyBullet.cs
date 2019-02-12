@@ -17,12 +17,14 @@ public class EnemyBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        string colliderName = collision.gameObject.name;
-
-        if (colliderName.Contains("Player") && !colliderName.Contains("Bullet"))
+        if (collision.CompareTag("Player"))
         {
             PlayerUtilities.life -= 1;
-            Destroy(this.gameObject);
+        }
+
+        if (!collision.CompareTag("TopEnemy") && !collision.CompareTag("MiddleEnemy") && !collision.CompareTag("BottomEnemy"))
+        {
+            Destroy(gameObject);
         }
     }
 
