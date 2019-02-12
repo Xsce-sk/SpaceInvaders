@@ -4,30 +4,31 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-    public Rigidbody2D rb2d;
     public float speed = 10f;
-    // Start is called before the first frame update
+
+    protected Rigidbody2D m_Rigidbody2D;
+
     void Start()
     {
-        
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        m_Rigidbody2D.gravityScale = 0;
+        m_Rigidbody2D.AddForce(Vector2.down * speed, ForceMode2D.Impulse);
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        rb2d.velocity = new Vector2(0, -1) * speed;
-    }
+        string colliderName = collision.gameObject.name;
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.name.Contains("Player") && !col.gameObject.name.Contains("Bullet"))
+        if (colliderName.Contains("Player") && !colliderName.Contains("Bullet"))
         {
             //decrease life
             PlayerUtilities.life -= 1;
             Destroy(this.gameObject);
         }
+    }
 
-        if (col.gameObject.name.Contains("Wall"))
-            Destroy(this.gameObject);
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }
