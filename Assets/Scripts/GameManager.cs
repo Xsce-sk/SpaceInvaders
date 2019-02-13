@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static int score = 0;
+    private static int lives = 0;
     private static int difficulty = 1;
 
     void Awake()
@@ -17,6 +18,11 @@ public class GameManager : MonoBehaviour
         score += points;
     }
 
+    public static void LoseLife()
+    {
+        lives -= 1;
+    }
+
     public static void IncreaseDiffculty()
     {
         difficulty -= 1;
@@ -27,8 +33,8 @@ public class GameManager : MonoBehaviour
         print("Game Over");
     }
 
-    public static void RestartLevel()
+    public static void StartGame()
     {
-        print("Restart Level");
+        
     }
 }
