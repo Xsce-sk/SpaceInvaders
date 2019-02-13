@@ -4,10 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BottomEnemy
-  - MiddleEnemy
-  - TopEnemy
   - Shield
+  - Enemy
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX

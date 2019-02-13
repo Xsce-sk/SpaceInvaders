@@ -11,11 +11,9 @@ public class PlayerShooting : MonoBehaviour
     { }
 
     public GameObject playerBullet;
-    public GameObject playerFire;
     public ShootEvent OnShoot;
 
     private GameObject m_PreviousBullet;
-    private GameObject m_PlayerFire;
     private Vector3 m_SpawnPosition;
 
     protected Transform m_Transform;
@@ -33,7 +31,6 @@ public class PlayerShooting : MonoBehaviour
 
             GetSpawnPosition();
             SpawnBullet();
-            SpawnFire();
         }
     }
 
@@ -47,11 +44,5 @@ public class PlayerShooting : MonoBehaviour
     {
         m_PreviousBullet = Instantiate(playerBullet, m_SpawnPosition, Quaternion.identity) as GameObject;
         m_PreviousBullet.transform.SetParent(m_Transform);
-    }
-
-    void SpawnFire()
-    {
-        m_PlayerFire = Instantiate(playerFire, m_SpawnPosition, Quaternion.identity) as GameObject;
-        m_PlayerFire.transform.SetParent(m_Transform);
     }
 }

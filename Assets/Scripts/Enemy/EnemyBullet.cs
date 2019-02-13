@@ -22,7 +22,7 @@ public class EnemyBullet : MonoBehaviour
             PlayerUtilities.life -= 1;
         }
 
-        if (!collision.CompareTag("TopEnemy") && !collision.CompareTag("MiddleEnemy") && !collision.CompareTag("BottomEnemy"))
+        if (!collision.CompareTag("Enemy"))
         {
             Destroy(gameObject);
         }

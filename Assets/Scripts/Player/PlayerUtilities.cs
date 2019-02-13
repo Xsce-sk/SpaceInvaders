@@ -4,33 +4,38 @@ using UnityEngine;
 
 public class PlayerUtilities : MonoBehaviour
 {
-    public static float score = 0f;
-    public static float life = 3f;
+    private static int score = 0;
+    private static int life = 3;
+    private static int difficulty = 1;
     
     void Awake()
     {
-        score = 0f;
-        life = 3f;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        score = 0;
+        life = 3;
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void AddScore(int points)
     {
-        Debug.Log(life);
+        score += points;
     }
 
-    public void AddScore(float enemyScore)
+    public static void LoseLife()
     {
-        score += enemyScore;
+        life -= 1;
     }
 
-    public void LoseLife()
+    public static void IncreaseDiffculty()
     {
-        life -= 1f;
+        difficulty -= 1;
+    }
+
+    public static void GameOver()
+    {
+        print("Game Over");
+    }
+
+    public static void RestartLevel()
+    {
+        print("Restart Level");
     }
 }
