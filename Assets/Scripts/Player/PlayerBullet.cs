@@ -3,9 +3,7 @@
 public class PlayerBullet : MonoBehaviour
 {
     public float speed = 10f;
-    public GameObject playerFire;
-
-    private GameObject m_PlayerFire;
+    public GameObject playerFirePrefab;
 
     protected Transform m_Transform;
     protected Rigidbody2D m_Rigidbody2D;
@@ -22,8 +20,8 @@ public class PlayerBullet : MonoBehaviour
 
     void SpawnFire()
     {
-        m_PlayerFire = Instantiate(playerFire, m_Transform.position, Quaternion.identity) as GameObject;
-        m_PlayerFire.transform.SetParent(m_Transform.parent);
+        GameObject spawnedFire = Instantiate(playerFirePrefab, m_Transform.position, Quaternion.identity) as GameObject;
+        spawnedFire.transform.SetParent(m_Transform.parent);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
