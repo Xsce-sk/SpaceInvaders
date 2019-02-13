@@ -21,7 +21,7 @@ public class EnemyDeath : MonoBehaviour
     {
         if (collision.CompareTag("PlayerBullet"))
         {
-            PlayerUtilities.score += enemyScore;
+            GameManager.AddScore(enemyScore);
             CreateRagdoll(collision.transform.position);
             Destroy(gameObject);
         }
@@ -36,10 +36,5 @@ public class EnemyDeath : MonoBehaviour
         m_RagdollRigidbody2D = m_Ragdoll.GetComponent<Rigidbody2D>();
         m_RagdollRigidbody2D.AddForce(direction * 300);
         m_RagdollRigidbody2D.AddTorque(-direction.x * 1000);
-    }
-
-    void OnBecameInvisible()
-    {
-        Destroy(gameObject);
     }
 }

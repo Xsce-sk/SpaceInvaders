@@ -19,7 +19,7 @@ public class EnemyBullet : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            PlayerUtilities.life -= 1;
+            GameManager.LoseLife();
         }
 
         if (!collision.CompareTag("Enemy"))

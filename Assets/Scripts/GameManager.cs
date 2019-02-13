@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerUtilities : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     private static int score = 0;
     private static int life = 3;
     private static int difficulty = 1;
-    
+
     void Awake()
     {
         score = 0;
