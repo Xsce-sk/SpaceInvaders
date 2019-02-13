@@ -15,9 +15,10 @@ public class GameManager : MonoBehaviour
     private static GameObject m_ExplosionPrefab;
 
     protected static Transform m_Transform;
-    protected static PlayerController m_PlayerController;
     protected static Transform m_CameraTransform;
-    
+    protected static PlayerController m_PlayerController;
+    protected static LivesText m_LivesText;
+    protected static ScoreText m_ScoreText;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
 
         m_StartMenu = m_Transform.GetChild(0).gameObject;
         m_PlayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        m_ScoreText = GetComponentInChildren<ScoreText>();
 
         m_OriginalCameraPosition = m_CameraTransform.position;
     }
@@ -40,11 +42,13 @@ public class GameManager : MonoBehaviour
     {
         print("Adding " + points + " Points");
         score += points;
+        m_ScoreText.UpdateScoreText();
     }
 
     public static void LoseLife()
     {
         lives -= 1;
+        m_LivesText.UpdateLivesText();
         print("Losing Life, Current Life: " + lives);
     }
 
