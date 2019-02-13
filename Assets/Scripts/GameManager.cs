@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static int score = 0;
-    public static int lives = 0;
+    public static int lives = 3;
     public static int charge = 1;
     public static int difficulty = 1;
 
@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 
     protected static Transform m_Transform;
     protected static Transform m_CameraTransform;
+    protected static Transform m_PlayerTransform;
+    protected static Transform m_EnemiesTransform;
+
     protected static PlayerController m_PlayerController;
     protected static LivesText m_LivesText;
     protected static ScoreText m_ScoreText;
@@ -29,18 +32,21 @@ public class GameManager : MonoBehaviour
     {
         m_Transform = transform;
         m_CameraTransform = Camera.main.transform;
-        m_ExplosionPrefab = Resources.Load<GameObject>("Prefabs/Explosion");
+        m_PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        m_EnemiesTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
-        m_StartMenu = m_Transform.GetChild(0).gameObject;
-        m_PlayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+        m_PlayerController = m_PlayerTransform.gameObject.GetComponent<PlayerController>();
+        m_LivesText = GetComponentInChildren<LivesText>();
         m_ScoreText = GetComponentInChildren<ScoreText>();
-
+        
         m_OriginalCameraPosition = m_CameraTransform.position;
+        m_StartMenu = m_Transform.GetChild(0).gameObject;
+        m_ExplosionPrefab = Resources.Load<GameObject>("Prefabs/Explosion");
     }
 
     public static void AddScore(int points)
     {
-        print("Adding " + points + " Points");
         score += points;
         m_ScoreText.UpdateScoreText();
     }
@@ -48,8 +54,14 @@ public class GameManager : MonoBehaviour
     public static void LoseLife()
     {
         lives -= 1;
+
+        if (lives <= 0)
+        {
+            GameOver();
+        }
+
         m_LivesText.UpdateLivesText();
-        print("Losing Life, Current Life: " + lives);
+        ResetCharge();
     }
 
     public static void IncreaseCharge()
@@ -58,13 +70,11 @@ public class GameManager : MonoBehaviour
         {
             charge++;
             m_PlayerController.UpdateParticleSystem();
-            print("Gaining Charge, Current Charge: " + charge);
         }
     }
 
     public static void ResetCharge()
     {
-        print("Reset Charge");
         charge = 1;
         m_PlayerController.UpdateParticleSystem();
     }
@@ -76,12 +86,12 @@ public class GameManager : MonoBehaviour
         instance.StartCoroutine("CameraShake", scale);
     }
 
-    public void IncreaseDiffculty()
+    public static void IncreaseDiffculty()
     {
         difficulty -= 1;
     }
 
-    public void GameOver()
+    public static void GameOver()
     {
         print("Game Over");
     }

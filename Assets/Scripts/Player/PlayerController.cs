@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour
     public Material chargeBulletMaterial;
     public Material superBulletMaterial;
 
+    private bool m_IsInvincible;
+
     protected Transform m_Transform;
-    protected GameObject m_Ship;
     protected Transform m_ShipTransform;
+    protected SpriteRenderer m_ShipSpriteRenderer;
     protected ParticleSystem m_ParticleSystem;
     protected ParticleSystemRenderer m_ParticleSystemRenderer;
 
@@ -39,16 +41,38 @@ public class PlayerController : MonoBehaviour
     {
         m_Transform = transform;
         m_ShipTransform = m_Transform.GetChild(0);
-        m_Ship = m_ShipTransform.gameObject;
+        m_ShipSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_ParticleSystem = GetComponentInChildren<ParticleSystem>();
         m_ParticleSystemRenderer = GetComponentInChildren<ParticleSystemRenderer>();
+
+        m_IsInvincible = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ragdoll"))
+        if (collision.CompareTag("Ragdoll") ||
+            collision.CompareTag("EnemyBullet"))
         {
-            GameManager.LoseLife();
+            if (!m_IsInvincible)
+            {
+                GameManager.LoseLife();
+                StartCoroutine("InvincibleFrames");
+            }
         }
+    }
+
+    IEnumerator InvincibleFrames()
+    {
+        m_IsInvincible = true;
+
+        for (int i = 0; i < 5; i++)
+        {
+            m_ShipSpriteRenderer.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            m_ShipSpriteRenderer.enabled = true;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        m_IsInvincible = false;
     }
 }

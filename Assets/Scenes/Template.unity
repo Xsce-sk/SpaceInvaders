@@ -5670,6 +5670,7 @@ GameObject:
   - component: {fileID: 1659619256}
   - component: {fileID: 1659619258}
   - component: {fileID: 1659619257}
+  - component: {fileID: 1659619259}
   m_Layer: 5
   m_Name: LivesText
   m_TagString: Untagged
@@ -5821,6 +5822,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1659619255}
   m_CullTransparentMesh: 0
+--- !u!114 &1659619259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659619255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6616c3509af40f04a9f3a56b07e9c3d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1703346127
 GameObject:
   m_ObjectHideFlags: 0
@@ -7499,6 +7512,11 @@ PrefabInstance:
     - target: {fileID: 80038241008834296, guid: 9857e1377422a304cbd439389fb3801a,
         type: 3}
       propertyPath: m_Name
+      value: Enemies
+      objectReference: {fileID: 0}
+    - target: {fileID: 80038241008834296, guid: 9857e1377422a304cbd439389fb3801a,
+        type: 3}
+      propertyPath: m_TagString
       value: Enemies
       objectReference: {fileID: 0}
     - target: {fileID: 80038241008834302, guid: 9857e1377422a304cbd439389fb3801a,

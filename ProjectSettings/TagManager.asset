@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - PlayerBullet
   - Ragdoll
+  - EnemyBullet
+  - Enemies
   layers:
   - Default
   - TransparentFX
