@@ -3,11 +3,12 @@
 public class PlayerBullet : MonoBehaviour
 {
     public float speed = 10f;
-    public int bulletCharge;
     public GameObject playerFirePrefab;
     public Sprite bulletSprite;
     public Sprite chargeBulletSprite;
     public Sprite superBulletSprite;
+
+    private int m_Health;
 
     protected Transform m_Transform;
     protected Rigidbody2D m_Rigidbody2D;
@@ -19,16 +20,20 @@ public class PlayerBullet : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
 
-        m_Rigidbody2D.gravityScale = 0;
-        m_Rigidbody2D.AddForce(Vector2.up * speed, ForceMode2D.Impulse);
+        m_Health = GameManager.charge;
+        UpdateSprite();
 
         SpawnFire();
+
+        m_Rigidbody2D.gravityScale = 0;
+        m_Rigidbody2D.AddForce(Vector2.up * speed * m_Health, ForceMode2D.Impulse);
     }
 
     void SpawnFire()
     {
-        GameObject spawnedFire = Instantiate(playerFirePrefab, m_Transform.position, Quaternion.identity) as GameObject;
-        spawnedFire.transform.localScale = Vector3.one * charge;
+        Vector3 spawnPosition = new Vector3(m_Transform.position.x, m_Transform.position.y + (0.25f * m_Health), m_Transform.position.z);
+        GameObject spawnedFire = Instantiate(playerFirePrefab, spawnPosition, Quaternion.identity) as GameObject;
+        spawnedFire.transform.localScale = Vector3.one * m_Health;
         spawnedFire.transform.SetParent(m_Transform.parent);
     }
 
@@ -37,15 +42,16 @@ public class PlayerBullet : MonoBehaviour
         if (collision.CompareTag("Enemy") ||
             collision.CompareTag("Shield"))
         {
-            LoseCharge()
+            GameManager.SpawnExplosion(m_Transform.position, 2);
+            LoseHealth();
         }
     }
 
-    void LoseCharge()
+    void LoseHealth()
     {
-        bulletCharge -= 1;
+        m_Health -= 1;
 
-        if (bulletCharge <= 1)
+        if (m_Health <= 0)
         {
             Destroy(gameObject);
         }
@@ -55,7 +61,7 @@ public class PlayerBullet : MonoBehaviour
 
     void UpdateSprite()
     {
-        switch (bulletCharge)
+        switch (m_Health)
         {
             case 3:
                 m_SpriteRenderer.sprite = superBulletSprite;

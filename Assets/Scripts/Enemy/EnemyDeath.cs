@@ -22,6 +22,7 @@ public class EnemyDeath : MonoBehaviour
         if (collision.CompareTag("PlayerBullet"))
         {
             GameManager.AddScore(enemyScore);
+            GameManager.IncreaseCharge();
             CreateRagdoll(collision.transform.position);
             Destroy(gameObject);
         }

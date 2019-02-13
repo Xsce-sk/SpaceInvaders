@@ -14,6 +14,15 @@ public class EnemyRagdoll : MonoBehaviour
         StartCoroutine("SpawnAnimation");
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Shield") || collision.CompareTag("Player"))
+        {
+            GameManager.SpawnExplosion(m_Transform.position, 4);
+            Destroy(gameObject);
+        }
+    }
+
     void OnBecameInvisible()
     {
         Destroy(gameObject);

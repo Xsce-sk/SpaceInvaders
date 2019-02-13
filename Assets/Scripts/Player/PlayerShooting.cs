@@ -10,29 +10,13 @@ public class PlayerShooting : MonoBehaviour
     public class ShootEvent : UnityEvent<PlayerShooting>
     { }
 
-    public GameObject regularBullet;
-    public GameObject chargeBullet;
-    public GameObject superBullet;
+    public GameObject playerBullet;
     public ShootEvent OnShoot;
 
     private GameObject m_PreviousBullet;
     private Vector3 m_SpawnPosition;
-    private int m_Charge;
 
     protected Transform m_Transform;
-
-    public void increaseCharge()
-    {
-        if (m_Charge < 3)
-        {
-            m_Charge++;
-        }
-    }
-
-    public void resetCharge()
-    {
-        m_Charge = 0;
-    }
 
     void Start()
     {
@@ -41,12 +25,19 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
-        if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Mouse0)) && m_PreviousBullet == null) 
+        if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Mouse0)))
         {
-            OnShoot.Invoke(this);
+            if (!m_PreviousBullet)
+            {
+                OnShoot.Invoke(this);
 
-            GetSpawnPosition();
-            SpawnBullet();
+                GetSpawnPosition();
+                SpawnBullet();
+            }
+            else
+            {
+                GameManager.ResetCharge();
+            }
         }
     }
 
@@ -58,7 +49,7 @@ public class PlayerShooting : MonoBehaviour
 
     void SpawnBullet()
     {
-        m_PreviousBullet = Instantiate(regularBullet, m_SpawnPosition, Quaternion.identity) as GameObject;
+        m_PreviousBullet = Instantiate(playerBullet, m_SpawnPosition, Quaternion.identity) as GameObject;
         m_PreviousBullet.transform.SetParent(m_Transform);
     }
 }

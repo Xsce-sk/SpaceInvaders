@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  explosionPrefab: {fileID: 3049588189072759995, guid: 372180c61e38ddc4ca8941215f557ae1,
+    type: 3}
 --- !u!58 &6952774267923286550
 CircleCollider2D:
   m_ObjectHideFlags: 0

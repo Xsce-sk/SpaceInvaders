@@ -1376,6 +1376,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3772770175123202949, guid: 7e701b20b47997f409a11057777c4ec7,
         type: 3}
+    - target: {fileID: 7479418461403182711, guid: e54133c813376c140834c4d571daebde,
+        type: 3}
+      propertyPath: playerBullet
+      value: 
+      objectReference: {fileID: 3772770175123202949, guid: 7e701b20b47997f409a11057777c4ec7,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 8620597081082560203, guid: e54133c813376c140834c4d571daebde, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e54133c813376c140834c4d571daebde, type: 3}
@@ -3689,6 +3695,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957105626}
   m_CullTransparentMesh: 0
+--- !u!1 &1978170141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6664822648605442617, guid: e54133c813376c140834c4d571daebde,
+    type: 3}
+  m_PrefabInstance: {fileID: 774817562}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1978170142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978170141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ebc9f621c6afad418058915378cd176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1992767939
 GameObject:
   m_ObjectHideFlags: 0
@@ -3916,12 +3940,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2068947496}
-        m_MethodName: 
+      - m_Target: {fileID: 1853535311}
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
