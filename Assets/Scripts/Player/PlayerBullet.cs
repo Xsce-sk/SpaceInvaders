@@ -9,6 +9,7 @@ public class PlayerBullet : MonoBehaviour
     public Sprite superBulletSprite;
 
     private int m_Health;
+    private bool m_FirstHit;
 
     protected Transform m_Transform;
     protected Rigidbody2D m_Rigidbody2D;
@@ -22,6 +23,8 @@ public class PlayerBullet : MonoBehaviour
 
         m_Health = GameManager.charge;
         UpdateSprite();
+
+        m_FirstHit = true;
 
         SpawnFire();
 
@@ -44,6 +47,11 @@ public class PlayerBullet : MonoBehaviour
         {
             GameManager.SpawnExplosion(m_Transform.position, 2);
             LoseHealth();
+            if (m_FirstHit)
+            {
+                GameManager.IncreaseCharge();
+                m_FirstHit = false;
+            }
         }
     }
 

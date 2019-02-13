@@ -11,12 +11,12 @@ public class EnemyRagdoll : MonoBehaviour
     {
         m_Transform = transform;
         m_CameraTransform = Camera.main.gameObject.transform;
-        StartCoroutine("SpawnAnimation");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Shield") || collision.CompareTag("Player"))
+        if (collision.CompareTag("Shield") ||
+            collision.CompareTag("Player"))
         {
             GameManager.SpawnExplosion(m_Transform.position, 4);
             Destroy(gameObject);
@@ -26,39 +26,6 @@ public class EnemyRagdoll : MonoBehaviour
     void OnBecameInvisible()
     {
         Destroy(gameObject);
-    }
-
-    IEnumerator SpawnAnimation()
-    {
-        yield return CameraShake();
-        //yield return FreezeTime();
-    }
-
-    IEnumerator CameraShake()
-    {
-        Vector3 originalPosition = m_CameraTransform.position;
-
-        for (int i = 0; i < 3; i++)
-        {
-            Vector3 currentPosition = m_CameraTransform.position;
-            Vector3 targetPosition = new Vector3(Random.Range(currentPosition.x - 0.25f, currentPosition.x + 0.25f),
-                                                 Random.Range(currentPosition.y - 0.25f, currentPosition.y + 0.25f),
-                                                 currentPosition.z);
-            yield return MoveTo(currentPosition, targetPosition, 0.1f);
-        }
-
-        yield return MoveTo(m_CameraTransform.position, originalPosition, 0.1f);
-    }
-
-    IEnumerator MoveTo(Vector3 startPosition, Vector3 targetPosition, float duration)
-    {
-        float elapsedTime = 0;
-        while (elapsedTime < duration)
-        {
-            m_CameraTransform.position = Vector3.Lerp(startPosition, targetPosition, (elapsedTime / duration));
-            elapsedTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
     }
 
     IEnumerator FreezeTime()
