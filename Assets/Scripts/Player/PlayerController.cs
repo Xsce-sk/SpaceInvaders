@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     protected ParticleSystemRenderer m_ParticleSystemRenderer;
     protected Rigidbody2D m_RigidBody2D;
 
-    public void StartLevel()
+    public void StartGame()
     {
         m_Transform.position = Vector3.up * -38.5f;
         Vector3 targetPosition = new Vector3(0, -20.5f, -5);

@@ -27,16 +27,4 @@ public class EnemyRagdoll : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    IEnumerator FreezeTime()
-    {
-        Time.timeScale = 0.5f;
-        yield return new WaitForSeconds(0.5f * 0.25f);
-
-        while (Time.timeScale < 1)
-        {
-            Time.timeScale += 0.02f;
-            yield return new WaitForSeconds(0.01f * Time.timeScale);
-        }
-    }
 }

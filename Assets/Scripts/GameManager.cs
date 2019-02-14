@@ -23,10 +23,12 @@ public class GameManager : MonoBehaviour
     protected static Transform m_CameraTransform;
     protected static Transform m_PlayerTransform;
     protected static Transform m_EnemiesTransform;
+    protected static Transform m_ShieldsTransform;
     protected static Transform m_InGameUITransform;
 
     protected static PlayerController m_PlayerController;
     protected static EnemyController m_EnemyController;
+    protected static ShieldController m_ShieldController;
     protected static LivesText m_LivesText;
     protected static ScoreText m_ScoreText;
 
@@ -41,10 +43,12 @@ public class GameManager : MonoBehaviour
         m_CameraTransform = Camera.main.transform;
         m_PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         m_EnemiesTransform = GameObject.FindGameObjectWithTag("Enemies").transform;
+        m_ShieldsTransform = GameObject.FindGameObjectWithTag("Shields").transform;
         m_InGameUITransform = m_Transform.GetChild(3);
 
         m_PlayerController = m_PlayerTransform.gameObject.GetComponent<PlayerController>();
         m_EnemyController = m_EnemiesTransform.gameObject.GetComponent<EnemyController>();
+        m_ShieldController = m_ShieldsTransform.gameObject.GetComponent<ShieldController>();
         m_LivesText = GetComponentInChildren<LivesText>();
         m_ScoreText = GetComponentInChildren<ScoreText>();
         
@@ -138,6 +142,11 @@ public class GameManager : MonoBehaviour
             Destroy(bullet);
         }
 
+        foreach (GameObject bullet in GameObject.FindGameObjectsWithTag("PlayerBullet"))
+        {
+            Destroy(bullet);
+        }
+
         foreach (GameObject ragdoll in GameObject.FindGameObjectsWithTag("Ragdoll"))
         {
             Destroy(ragdoll);
@@ -150,7 +159,8 @@ public class GameManager : MonoBehaviour
 
         m_ScoreText.UpdateScoreText();
 
-        m_PlayerController.StartLevel();
+        m_PlayerController.StartGame();
+        m_ShieldController.StartGame();
         m_EnemyController.StartLevel();
         m_EnemyController.StartShooting();
         EnableInGameUI();
@@ -203,8 +213,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             Vector3 currentPosition = m_CameraTransform.position;
-            Vector3 targetPosition = new Vector3(Random.Range(currentPosition.x - 0.25f * amount, currentPosition.x + 0.25f * amount),
-                                                 Random.Range(currentPosition.y - 0.25f * amount, currentPosition.y + 0.25f * amount),
+            Vector3 targetPosition = new Vector3(Random.Range(currentPosition.x - 0.1f * amount, currentPosition.x + 0.1f * amount),
+                                                 Random.Range(currentPosition.y - 0.1f * amount, currentPosition.y + 0.1f * amount),
                                                  currentPosition.z);
             yield return MoveTo(currentPosition, targetPosition, 0.1f);
         }

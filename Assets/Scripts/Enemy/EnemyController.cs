@@ -30,8 +30,22 @@ public class EnemyController : MonoBehaviour
         StopCoroutine("ShootLoop");
     }
 
+    public void StartGame()
+    {
+        m_Rigidbody2D.velocity = Vector2.zero;
+        m_Transform.position = Vector3.up * 30;
+        FillEnemyGrid();
+
+        Vector3 currentPosition = m_Transform.position;
+        Vector3 targetPosition = new Vector3(0, 12, 0);
+        StartCoroutine(MoveTo(currentPosition, targetPosition, 2));
+        StartCoroutine(MoveRightAfterTime(2));
+    }
+
     public void StartLevel()
     {
+        StartCoroutine(FreezeTime());
+
         m_Rigidbody2D.velocity = Vector2.zero;
         m_Transform.position = Vector3.up * 30;
         FillEnemyGrid();
@@ -48,7 +62,11 @@ public class EnemyController : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
         m_Rigidbody2D.gravityScale = 0;
-        
+    }
+
+    void Update()
+    {
+        print(m_EnemyGrid != null);
     }
 
     void FillEnemyGrid()
@@ -187,5 +205,17 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(duration);
         m_Direction = 1;
         m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed, ForceMode2D.Impulse);
+    }
+
+    IEnumerator FreezeTime()
+    {
+        Time.timeScale = 0.5f;
+        yield return new WaitForSeconds(0.5f * 1f);
+
+        while (Time.timeScale < 1)
+        {
+            Time.timeScale += 0.02f;
+            yield return new WaitForSeconds(0.01f * Time.timeScale);
+        }
     }
 }

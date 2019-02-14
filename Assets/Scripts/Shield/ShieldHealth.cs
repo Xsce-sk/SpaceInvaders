@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldController : MonoBehaviour
+public class ShieldHealth : MonoBehaviour
 {
     public Sprite HealthySprite;
     public Sprite BrokenGlassSprite;
@@ -13,11 +13,17 @@ public class ShieldController : MonoBehaviour
 
     protected SpriteRenderer m_SpriteRenderer;
 
+    public void ResetHealth()
+    {
+        m_Health = 4;
+        UpdateSprite();
+    }
+
     void Start()
     {
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
 
-        m_Health = 4;
+        ResetHealth();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -27,18 +33,16 @@ public class ShieldController : MonoBehaviour
 
     void LoseHealth()
     {
-        m_Health -= 1;
-
-        if (m_Health == 0)
+        if (m_Health > 0)
         {
-            Destroy(gameObject);
+            m_Health -= 1;
+            UpdateSprite();
         }
-
-        UpdateSprite();
     }
 
     void UpdateSprite()
     {
+        tag = "Shield";
         switch (m_Health)
         {
             case 4:
@@ -52,6 +56,10 @@ public class ShieldController : MonoBehaviour
                 break;
             case 1:
                 m_SpriteRenderer.sprite = DestroyedSprite;
+                break;
+            case 0:
+                m_SpriteRenderer.sprite = null;
+                tag = "Untagged";
                 break;
             default:
                 break;
