@@ -8,7 +8,6 @@ public class EnemyController : MonoBehaviour
     public float moveDownDuration = 1;
     public float defaultShootDelay = 3;
     public float delayShootRange = 1;
-    public Vector2 startPosition = Vector2.zero;
     public GameObject topEnemy;
     public GameObject middleEnemy;
     public GameObject bottomEnemy;
@@ -21,16 +20,35 @@ public class EnemyController : MonoBehaviour
     protected Transform m_Transform;
     protected Rigidbody2D m_Rigidbody2D;
 
+    public void StartShooting()
+    {
+        StartCoroutine("ShootLoop");
+    }
+
+    public void StopShooting()
+    {
+        StopCoroutine("ShootLoop");
+    }
+
+    public void StartLevel()
+    {
+        m_Rigidbody2D.velocity = Vector2.zero;
+        m_Transform.position = Vector3.up * 30;
+        FillEnemyGrid();
+        
+        Vector3 currentPosition = m_Transform.position;
+        Vector3 targetPosition = new Vector3(0, 12, 0);
+        StartCoroutine(MoveTo(currentPosition, targetPosition, 2));
+        StartCoroutine(MoveRightAfterTime(2));
+    }
+
     void Start()
     {
         m_Transform = transform;
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
         m_Rigidbody2D.gravityScale = 0;
-        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed, ForceMode2D.Impulse);
-
-        FillEnemyGrid();
-        StartCoroutine("ShootLoop");
+        
     }
 
     void FillEnemyGrid()
@@ -40,7 +58,7 @@ public class EnemyController : MonoBehaviour
             for (int column = 0; column < 11; column++)
             {
                 GameObject enemyType = GetEnemyType(row);
-                Vector2 enemyPosition = new Vector2(startPosition.x + (column * 2), startPosition.y - (row * 2));
+                Vector2 enemyPosition = new Vector2(m_Transform.position.x + - 10 + (column * 2), m_Transform.position.y + 6 - (row * 2));
                 GameObject spawnedEnemy = Instantiate(enemyType, enemyPosition, Quaternion.identity) as GameObject;
                 m_EnemyGrid[row, column] = spawnedEnemy;
                 spawnedEnemy.transform.SetParent(m_Transform);
@@ -138,24 +156,36 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveDown()
+    IEnumerator MoveDown()
     {
         m_IsMovingDown = true;
 
         Vector3 currentPosition = m_Transform.position;
         Vector3 targetPosition = new Vector3(currentPosition.x, currentPosition.y - 2, currentPosition.z);
 
-        float elapsedTime = 0;
-        while (elapsedTime < moveDownDuration)
-        {
-            m_Transform.position = Vector3.Lerp(currentPosition, targetPosition, (elapsedTime / moveDownDuration));
-            elapsedTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
+        yield return MoveTo(currentPosition, targetPosition, moveDownDuration);
 
         m_Direction *= -1;
         m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed, ForceMode2D.Impulse);
 
         m_IsMovingDown = false;
+    }
+
+    IEnumerator MoveTo(Vector3 startPosition, Vector3 targetPosition, float duration)
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            m_Transform.position = Vector3.Lerp(startPosition, targetPosition, (elapsedTime / duration));
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator MoveRightAfterTime(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        m_Direction = 1;
+        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed, ForceMode2D.Impulse);
     }
 }

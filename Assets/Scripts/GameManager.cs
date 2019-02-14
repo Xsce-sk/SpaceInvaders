@@ -10,16 +10,23 @@ public class GameManager : MonoBehaviour
     public static int charge = 1;
     public static int difficulty = 1;
 
-    protected static Vector3 m_OriginalCameraPosition;
+    private static Vector3 m_OriginalCameraPosition;
+    private static bool m_CanIncreaseCharge;
+    private static bool m_CanPause;
     private static GameObject m_StartMenu;
+    private static GameObject m_GameOverMenu;
+    private static GameObject m_PauseMenu;
+    private static GameObject m_InGameUI;
     private static GameObject m_ExplosionPrefab;
-
+    
     protected static Transform m_Transform;
     protected static Transform m_CameraTransform;
     protected static Transform m_PlayerTransform;
     protected static Transform m_EnemiesTransform;
+    protected static Transform m_InGameUITransform;
 
     protected static PlayerController m_PlayerController;
+    protected static EnemyController m_EnemyController;
     protected static LivesText m_LivesText;
     protected static ScoreText m_ScoreText;
 
@@ -33,16 +40,23 @@ public class GameManager : MonoBehaviour
         m_Transform = transform;
         m_CameraTransform = Camera.main.transform;
         m_PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        m_EnemiesTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
+        m_EnemiesTransform = GameObject.FindGameObjectWithTag("Enemies").transform;
+        m_InGameUITransform = m_Transform.GetChild(3);
 
         m_PlayerController = m_PlayerTransform.gameObject.GetComponent<PlayerController>();
+        m_EnemyController = m_EnemiesTransform.gameObject.GetComponent<EnemyController>();
         m_LivesText = GetComponentInChildren<LivesText>();
         m_ScoreText = GetComponentInChildren<ScoreText>();
         
         m_OriginalCameraPosition = m_CameraTransform.position;
         m_StartMenu = m_Transform.GetChild(0).gameObject;
+        m_GameOverMenu = m_Transform.GetChild(1).gameObject;
+        m_PauseMenu = m_Transform.GetChild(2).gameObject;
+        m_InGameUI = m_Transform.GetChild(3).gameObject;
         m_ExplosionPrefab = Resources.Load<GameObject>("Prefabs/Explosion");
+
+        m_CanPause = false;
+        DisableInGameUI();
     }
 
     public static void AddScore(int points)
@@ -64,9 +78,19 @@ public class GameManager : MonoBehaviour
         ResetCharge();
     }
 
+    public static void EnableIncreaseCharge()
+    {
+        m_CanIncreaseCharge = true;
+    }
+
+    public static void DisableIncreaseCharge()
+    {
+        m_CanIncreaseCharge = false;
+    }
+
     public static void IncreaseCharge()
     {
-        if (charge < 3)
+        if (charge < 3 && m_CanIncreaseCharge)
         {
             charge++;
             m_PlayerController.UpdateParticleSystem();
@@ -77,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         charge = 1;
         m_PlayerController.UpdateParticleSystem();
+        DisableIncreaseCharge();
     }
 
     public static void SpawnExplosion(Vector3 position, float scale)
@@ -93,17 +118,84 @@ public class GameManager : MonoBehaviour
 
     public static void GameOver()
     {
-        print("Game Over");
+        m_GameOverMenu.SetActive(true);
+        m_GameOverMenu.GetComponentInChildren<ScoreText>().UpdateScoreText();
+
+        instance.DisableInGameUI();
+
+        Time.timeScale = 0;
+        m_EnemyController.StopShooting();
+        m_CanPause = false;
     }
 
     public void StartGame()
     {
         m_StartMenu.SetActive(false);
+        m_GameOverMenu.SetActive(false);
+
+        foreach (GameObject bullet in GameObject.FindGameObjectsWithTag("EnemyBullet"))
+        {
+            Destroy(bullet);
+        }
+
+        foreach (GameObject ragdoll in GameObject.FindGameObjectsWithTag("Ragdoll"))
+        {
+            Destroy(ragdoll);
+        }
+
+        Time.timeScale = 1;
+        ResetCharge();
+        score = 0;
+        lives = 3;
+
+        m_ScoreText.UpdateScoreText();
+
+        m_PlayerController.StartLevel();
+        m_EnemyController.StartLevel();
+        m_EnemyController.StartShooting();
+        EnableInGameUI();
+        m_CanPause = true;
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        m_PauseMenu.SetActive(true);
+    }
+    private void ContinueGame()
+    {
+        Time.timeScale = 1;
+        m_PauseMenu.SetActive(false);
     }
 
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && m_CanPause)
+        {
+            if (!m_PauseMenu.activeInHierarchy)
+            {
+                PauseGame();
+            }
+            else if (m_PauseMenu.activeInHierarchy)
+            {
+                ContinueGame();
+            }
+        }
+    }
+
+    void DisableInGameUI()
+    {
+        m_InGameUITransform.localScale = Vector3.zero;
+    }
+
+    void EnableInGameUI()
+    {
+        instance.StartCoroutine("EnableInGameUIOverTime");
     }
 
     IEnumerator CameraShake(float amount)
@@ -130,5 +222,11 @@ public class GameManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    IEnumerator EnableInGameUIOverTime()
+    {
+        yield return new WaitForSeconds(2);
+        m_InGameUITransform.localScale = Vector3.one;
     }
 }

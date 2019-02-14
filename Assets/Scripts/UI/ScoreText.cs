@@ -12,7 +12,7 @@ public class ScoreText : MonoBehaviour
         m_TextMeshProUGUI.text = GameManager.score.ToString();
     }
 
-    void Start()
+    void Awake()
     {
         m_TextMeshProUGUI = GetComponent<TextMeshProUGUI>();
     }
