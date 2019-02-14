@@ -257,7 +257,7 @@ public class EnemyController : MonoBehaviour
     IEnumerator FreezeTime()
     {
         Time.timeScale = 0.75f;
-        yield return new WaitForSeconds(0.75f * 2f);
+        yield return new WaitForSeconds(0.75f * 1f);
 
         while (Time.timeScale < 1)
         {
