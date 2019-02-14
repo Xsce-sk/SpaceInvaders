@@ -17,6 +17,12 @@ public class EnemyDeath : MonoBehaviour
         m_Transform = transform;
     }
 
+    private void Update()
+    {
+        if (m_Transform.position.y < -11.5)
+            GameManager.GameOver();
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("PlayerBullet"))
@@ -25,7 +31,8 @@ public class EnemyDeath : MonoBehaviour
             CreateRagdoll(collision.transform.position);
             Destroy(gameObject);
         }
-        else if (collision.CompareTag("BottomWall"))
+
+        if (collision.CompareTag("BottomWall"))
         {
             GameManager.GameOver();
         }

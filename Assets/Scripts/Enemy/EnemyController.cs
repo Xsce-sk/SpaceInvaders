@@ -6,7 +6,7 @@ public class EnemyController : MonoBehaviour
 {
     public float moveSpeed = 1;
     public float moveDownDuration = 1;
-    public float defaultShootDelay = 10;
+    public float defaultShootDelay = 7;
     public float delayShootRange = 1;
     public GameObject topEnemy;
     public GameObject middleEnemy;
@@ -78,7 +78,6 @@ public class EnemyController : MonoBehaviour
         {
             GameManager.NewLevel();
         }
-        print(m_EnemyDifficulty);
     }
 
     bool CheckEmpty()
@@ -257,8 +256,8 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator FreezeTime()
     {
-        Time.timeScale = 0.5f;
-        yield return new WaitForSeconds(0.5f * 1f);
+        Time.timeScale = 0.75f;
+        yield return new WaitForSeconds(0.75f * 2f);
 
         while (Time.timeScale < 1)
         {

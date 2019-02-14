@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         m_PauseMenu.SetActive(true);
     }
-    private void ContinueGame()
+    public void ContinueGame()
     {
         Time.timeScale = 1;
         m_PauseMenu.SetActive(false);
