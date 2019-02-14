@@ -5,6 +5,7 @@ using UnityEngine;
 public class UFOController : MonoBehaviour
 {
     public Vector3 spawnPosition;
+    public float moveRange;
 
     protected Transform m_Transform;
 
@@ -13,11 +14,13 @@ public class UFOController : MonoBehaviour
         m_Transform = transform;
 
         m_Transform.position = spawnPosition;
+        
+        StartCoroutine(RandomFly());
     }
 
     private void Update()
     {
-        if (m_Transform.position.x < -19 || m_Transform.position.x > 19)
+        if (m_Transform.position.x < -20 || m_Transform.position.x > 20)
         {
             Destroy(gameObject);
         }
@@ -28,18 +31,29 @@ public class UFOController : MonoBehaviour
         if (collision.CompareTag("PlayerBullet"))
         {
             GameManager.AddScore(Random.Range(1,4) * 50 + 100);
+            GameManager.SpawnExplosion(m_Transform.position, 2);
             Destroy(gameObject);
         }
     }
 
-    void CreateRagdoll(Vector3 collisionPosition)
+    IEnumerator RandomFly()
     {
-        m_Ragdoll = Instantiate(ragdoll, m_Transform.position, Quaternion.identity) as GameObject;
-        float clampedXDirection = Mathf.Clamp(m_Transform.position.x - collisionPosition.x, -0.3f, 0.3f);
-        Vector3 direction = new Vector3(clampedXDirection, 1, 0);
+        while (true)
+        {
+            Vector3 currentPosition = m_Transform.position;
+            Vector3 targetPosition = new Vector3(currentPosition.x + Random.Range(0.5f, 1) * moveRange, Random.Range(spawnPosition.y - 3, spawnPosition.y + 3), currentPosition.z);
+            yield return MoveTo(currentPosition, targetPosition, Random.Range(0.3f, 0.6f));
+        }
+    }
 
-        m_RagdollRigidbody2D = m_Ragdoll.GetComponent<Rigidbody2D>();
-        m_RagdollRigidbody2D.AddForce(direction * 300);
-        m_RagdollRigidbody2D.AddTorque(-direction.x * 1000);
+    IEnumerator MoveTo(Vector3 startPosition, Vector3 targetPosition, float duration)
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            m_Transform.position = Vector3.Lerp(startPosition, targetPosition, (elapsedTime / duration));
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

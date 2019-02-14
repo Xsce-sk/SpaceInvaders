@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public float moveSpeed = 3;
+    public float moveSpeed = 1;
     public float moveDownDuration = 1;
-    public float defaultShootDelay = 3;
+    public float defaultShootDelay = 10;
     public float delayShootRange = 1;
     public GameObject topEnemy;
     public GameObject middleEnemy;
@@ -17,6 +17,8 @@ public class EnemyController : MonoBehaviour
     private int m_Direction = 1;
     private bool m_InitialSpawn = true;
     private bool m_IsMovingDown = false;
+    private bool m_CanShoot = true;
+    private float m_EnemyDifficulty = 0;
 
     protected Transform m_Transform;
     protected Rigidbody2D m_Rigidbody2D;
@@ -43,6 +45,8 @@ public class EnemyController : MonoBehaviour
         Vector3 targetPosition = new Vector3(0, 12, 0);
         StartCoroutine(MoveTo(currentPosition, targetPosition, 2));
         StartCoroutine(MoveRightAfterTime(2));
+
+        StartCoroutine("IncreaseDifficulty");
     }
 
     public void StartLevel()
@@ -55,7 +59,7 @@ public class EnemyController : MonoBehaviour
         FillEnemyGrid();
         
         Vector3 currentPosition = m_Transform.position;
-        Vector3 targetPosition = new Vector3(0, 12, 0);
+        Vector3 targetPosition = new Vector3(0, 12 - GameManager.difficulty * 2, 0);
         StartCoroutine(MoveTo(currentPosition, targetPosition, 2));
         StartCoroutine(MoveRightAfterTime(2));
     }
@@ -74,7 +78,7 @@ public class EnemyController : MonoBehaviour
         {
             GameManager.NewLevel();
         }
-        print(m_Rigidbody2D.velocity);
+        print(m_EnemyDifficulty);
     }
 
     bool CheckEmpty()
@@ -149,10 +153,11 @@ public class EnemyController : MonoBehaviour
         while (!CheckEmpty())
         {
             float additionalDelay = Random.Range(0, delayShootRange);
-            float delay = Mathf.Clamp(defaultShootDelay - GameManager.difficulty, 0, defaultShootDelay)  + additionalDelay;
+            float delay = Mathf.Clamp(defaultShootDelay - m_EnemyDifficulty, 0, defaultShootDelay)  + additionalDelay;
             yield return new WaitForSeconds(delay);
 
-            Shoot();
+            if (m_CanShoot)
+                Shoot();
         }
     }
 
@@ -220,7 +225,7 @@ public class EnemyController : MonoBehaviour
         yield return MoveTo(currentPosition, targetPosition, moveDownDuration);
 
         m_Direction *= -1;
-        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed * GameManager.difficulty, ForceMode2D.Impulse);
+        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * (moveSpeed + m_EnemyDifficulty), ForceMode2D.Impulse);
 
         m_IsMovingDown = false;
     }
@@ -238,10 +243,16 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator MoveRightAfterTime(float duration)
     {
+        m_CanShoot = false;
+
         yield return new WaitForSeconds(duration);
+        m_CanShoot = true;
+
         m_Rigidbody2D.velocity = Vector2.zero;
+        m_EnemyDifficulty = GameManager.difficulty - 1;
+
         m_Direction = 1;
-        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed * GameManager.difficulty, ForceMode2D.Impulse);
+        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * (moveSpeed + m_EnemyDifficulty), ForceMode2D.Impulse);
     }
 
     IEnumerator FreezeTime()
@@ -253,6 +264,15 @@ public class EnemyController : MonoBehaviour
         {
             Time.timeScale += 0.02f;
             yield return new WaitForSeconds(0.01f * Time.timeScale);
+        }
+    }
+
+    IEnumerator IncreaseDifficulty()
+    {
+        while(true)
+        {
+            m_EnemyDifficulty += 0.01f;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

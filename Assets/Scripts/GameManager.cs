@@ -133,6 +133,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         m_EnemyController.StopShooting();
         m_CanPause = false;
+
+        instance.StopCoroutine("SpawnUFO");
     }
 
     public void StartGame()
@@ -171,6 +173,8 @@ public class GameManager : MonoBehaviour
         m_EnemyController.StartShooting();
         EnableInGameUI();
         m_CanPause = true;
+
+        instance.StartCoroutine("SpawnUFO");
     }
 
     public static void NewLevel()
@@ -259,5 +263,22 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         m_InGameUITransform.localScale = Vector3.one;
+    }
+
+    IEnumerator SpawnUFO()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(20, 30));
+
+            if (Random.Range(0, 2) == 0)
+            {
+                Instantiate(Resources.Load("Prefabs/LeftUFO"));
+            }
+            else
+            {
+                Instantiate(Resources.Load("Prefabs/RightUFO"));
+            }
+        }
     }
 }
