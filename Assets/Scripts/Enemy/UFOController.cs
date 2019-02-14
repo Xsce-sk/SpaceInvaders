@@ -2,32 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDeath : MonoBehaviour
+public class UFOController : MonoBehaviour
 {
-    public int enemyScore;
-    public GameObject ragdoll;
-
-    private GameObject m_Ragdoll;
+    public Vector3 spawnPosition;
 
     protected Transform m_Transform;
-    protected Rigidbody2D m_RagdollRigidbody2D;
 
     void Start()
     {
         m_Transform = transform;
+
+        m_Transform.position = spawnPosition;
+    }
+
+    private void Update()
+    {
+        if (m_Transform.position.x < -19 || m_Transform.position.x > 19)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("PlayerBullet"))
         {
-            GameManager.AddScore(enemyScore);
-            CreateRagdoll(collision.transform.position);
+            GameManager.AddScore(Random.Range(1,4) * 50 + 100);
             Destroy(gameObject);
-        }
-        else if (collision.CompareTag("BottomWall"))
-        {
-            GameManager.GameOver();
         }
     }
 

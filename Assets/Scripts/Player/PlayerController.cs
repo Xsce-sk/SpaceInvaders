@@ -119,6 +119,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        m_HorizontalAxis = Input.GetAxis("Horizontal");
+
         if (((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.Mouse0))) && m_CanShoot)
         {
             if (!m_PreviousBullet)
@@ -140,8 +142,6 @@ public class PlayerController : MonoBehaviour
     {
         if (m_CanMove)
         {
-            m_HorizontalAxis = Input.GetAxis("Horizontal");
-
             Move();
             Tilt();
         }

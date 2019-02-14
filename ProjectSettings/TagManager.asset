@@ -11,6 +11,7 @@ TagManager:
   - EnemyBullet
   - Enemies
   - Shields
+  - BottomWall
   layers:
   - Default
   - TransparentFX

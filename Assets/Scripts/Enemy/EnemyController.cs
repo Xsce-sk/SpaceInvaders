@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
 
     private GameObject[,] m_EnemyGrid = new GameObject[5, 11];
     private int m_Direction = 1;
+    private bool m_InitialSpawn = true;
     private bool m_IsMovingDown = false;
 
     protected Transform m_Transform;
@@ -32,8 +33,10 @@ public class EnemyController : MonoBehaviour
 
     public void StartGame()
     {
-        m_Rigidbody2D.velocity = Vector2.zero;
+        m_InitialSpawn = false;
+        
         m_Transform.position = Vector3.up * 30;
+        ClearEnemyGrid();
         FillEnemyGrid();
 
         Vector3 currentPosition = m_Transform.position;
@@ -46,8 +49,9 @@ public class EnemyController : MonoBehaviour
     {
         StartCoroutine(FreezeTime());
 
-        m_Rigidbody2D.velocity = Vector2.zero;
+        
         m_Transform.position = Vector3.up * 30;
+        ClearEnemyGrid();
         FillEnemyGrid();
         
         Vector3 currentPosition = m_Transform.position;
@@ -66,7 +70,27 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        print(m_EnemyGrid != null);
+        if (CheckEmpty() && !m_InitialSpawn)
+        {
+            GameManager.NewLevel();
+        }
+        print(m_Rigidbody2D.velocity);
+    }
+
+    bool CheckEmpty()
+    {
+        bool isEmpty = true;
+
+        for (int row = 0; row < 5; row++)
+        {
+            for (int column = 0; column < 11; column++)
+            {
+                if (m_EnemyGrid[row, column] != null)
+                    isEmpty = false;
+            }
+        }
+
+        return isEmpty;
     }
 
     void FillEnemyGrid()
@@ -80,6 +104,17 @@ public class EnemyController : MonoBehaviour
                 GameObject spawnedEnemy = Instantiate(enemyType, enemyPosition, Quaternion.identity) as GameObject;
                 m_EnemyGrid[row, column] = spawnedEnemy;
                 spawnedEnemy.transform.SetParent(m_Transform);
+            }
+        }
+    }
+
+    void ClearEnemyGrid()
+    {
+        for (int row = 0; row < 5; row++)
+        {
+            for (int column = 0; column < 11; column++)
+            {
+                m_EnemyGrid[row, column] = null;
             }
         }
     }
@@ -111,10 +146,10 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator ShootLoop()
     {
-        while (m_EnemyGrid != null)
+        while (!CheckEmpty())
         {
             float additionalDelay = Random.Range(0, delayShootRange);
-            float delay = defaultShootDelay + additionalDelay;
+            float delay = Mathf.Clamp(defaultShootDelay - GameManager.difficulty, 0, defaultShootDelay)  + additionalDelay;
             yield return new WaitForSeconds(delay);
 
             Shoot();
@@ -172,6 +207,7 @@ public class EnemyController : MonoBehaviour
         {
             StartCoroutine("MoveDown");
         }
+
     }
 
     IEnumerator MoveDown()
@@ -184,7 +220,7 @@ public class EnemyController : MonoBehaviour
         yield return MoveTo(currentPosition, targetPosition, moveDownDuration);
 
         m_Direction *= -1;
-        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed, ForceMode2D.Impulse);
+        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed * GameManager.difficulty, ForceMode2D.Impulse);
 
         m_IsMovingDown = false;
     }
@@ -203,8 +239,9 @@ public class EnemyController : MonoBehaviour
     IEnumerator MoveRightAfterTime(float duration)
     {
         yield return new WaitForSeconds(duration);
+        m_Rigidbody2D.velocity = Vector2.zero;
         m_Direction = 1;
-        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed, ForceMode2D.Impulse);
+        m_Rigidbody2D.AddForce(Vector3.right * m_Direction * moveSpeed * GameManager.difficulty, ForceMode2D.Impulse);
     }
 
     IEnumerator FreezeTime()

@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     protected static ShieldController m_ShieldController;
     protected static LivesText m_LivesText;
     protected static ScoreText m_ScoreText;
+    protected static LevelText m_LevelText;
 
     private void Awake()
     {
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
         m_ShieldController = m_ShieldsTransform.gameObject.GetComponent<ShieldController>();
         m_LivesText = GetComponentInChildren<LivesText>();
         m_ScoreText = GetComponentInChildren<ScoreText>();
+        m_LevelText = GetComponentInChildren<LevelText>();
         
         m_OriginalCameraPosition = m_CameraTransform.position;
         m_StartMenu = m_Transform.GetChild(0).gameObject;
@@ -117,7 +119,8 @@ public class GameManager : MonoBehaviour
 
     public static void IncreaseDiffculty()
     {
-        difficulty -= 1;
+        difficulty += 1;
+        m_LevelText.UpdateLevelText();
     }
 
     public static void GameOver()
@@ -156,14 +159,32 @@ public class GameManager : MonoBehaviour
         ResetCharge();
         score = 0;
         lives = 3;
+        difficulty = 1;
 
+        m_LivesText.UpdateLivesText();
         m_ScoreText.UpdateScoreText();
+        m_LevelText.UpdateLevelText();
 
         m_PlayerController.StartGame();
         m_ShieldController.StartGame();
-        m_EnemyController.StartLevel();
+        m_EnemyController.StartGame();
         m_EnemyController.StartShooting();
         EnableInGameUI();
+        m_CanPause = true;
+    }
+
+    public static void NewLevel()
+    {
+        instance.DisableInGameUI();
+        IncreaseDiffculty();
+        lives++;
+
+        m_LivesText.UpdateLivesText();
+
+        m_EnemyController.StartLevel();
+        m_EnemyController.StopShooting();
+        m_EnemyController.StartShooting();
+        instance.EnableInGameUI();
         m_CanPause = true;
     }
 
